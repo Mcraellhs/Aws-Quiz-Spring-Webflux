@@ -15,13 +15,18 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/question")
+@CrossOrigin("*")
 public class QuestionController {
 
     @Autowired
     QuestionRepository questionRepository;
 
+    @GetMapping("/all")
+    public Flux<Question> getAllQuestions(){
+        return questionRepository.findAll();
+    }
     @GetMapping
-    public Flux<QuestionsToGetDTO> getAllQuestions(){
+    public Flux<QuestionsToGetDTO> getQuestions(){
         return questionRepository.findAll().map(QuestionMapper::toQuestionToGetDTO);
     }
 
