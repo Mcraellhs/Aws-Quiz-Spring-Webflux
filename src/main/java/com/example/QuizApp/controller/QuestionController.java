@@ -6,6 +6,11 @@ import com.example.QuizApp.mapper.QuestionMapper;
 import com.example.QuizApp.model.Question;
 import com.example.QuizApp.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +27,17 @@ public class QuestionController {
     QuestionRepository questionRepository;
 
     @GetMapping("/all")
-    public Flux<Question> getAllQuestions(){
-        return questionRepository.findAll();
+    public ResponseEntity<Flux<Question>> getAllQuestions(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "65") int size
+                                          ){
+        Flux<Question> data = questionRepository.findAll(Sort.unsorted())
+                .skip(page * size)
+                .take(size);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Pages", "65");
+
+        return ResponseEntity.ok().headers(headers).body(data);
     }
     @GetMapping
     public Flux<QuestionsToGetDTO> getQuestions(){

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Setter
 public class PracticeSet {
     @Id
-    private String Id;
+    private String id;
     private String title;
     private QuestionsToGetDTO[] questions;
     private Difficulty difficulty;

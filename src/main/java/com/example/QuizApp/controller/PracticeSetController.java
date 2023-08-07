@@ -1,6 +1,9 @@
 package com.example.QuizApp.controller;
 
+import com.example.QuizApp.dtos.PracticeSetToCreateDTO;
+import com.example.QuizApp.dtos.PracticeSetToUpdateDTO;
 import com.example.QuizApp.dtos.QuestionsToGetDTO;
+import com.example.QuizApp.mapper.PracticeSetMapper;
 import com.example.QuizApp.model.PracticeSet;
 import com.example.QuizApp.repository.PracticeSetRepository;
 import com.example.QuizApp.repository.QuestionRepository;
@@ -13,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("practice-set")
+@CrossOrigin("*")
 public class PracticeSetController {
 
     @Autowired
@@ -28,6 +32,20 @@ public class PracticeSetController {
     @GetMapping()
     public Flux<PracticeSet> getAllPracticeSets(){
         return practiceSetRepository.findAll();
+    }
+
+    @PostMapping()
+    public Mono<ResponseEntity<PracticeSet>> createPracticeSet(@RequestBody PracticeSetToCreateDTO practiceSet){
+       PracticeSet set = PracticeSetMapper.practiceSetToCreateToPracticeSet(practiceSet);
+       return practiceSetRepository.save(set).map(ResponseEntity::ok);
+    }
+
+    @PutMapping("/{practiceSetID}")
+    public Mono<ResponseEntity<PracticeSet>> updatePracticeSet(@RequestBody PracticeSetToUpdateDTO practiceSet,@PathVariable String practiceSetID){
+        return practiceSetRepository.findById(practiceSetID).flatMap(x->{
+            PracticeSet updatedSet=PracticeSetMapper.practiceSetToUpdateToPracticeSet(x,practiceSet);
+            return practiceSetRepository.save(updatedSet);
+        }).map(ResponseEntity::ok);
     }
 
     @PostMapping("/{practiceSetID}")
