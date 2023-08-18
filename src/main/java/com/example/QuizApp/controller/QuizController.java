@@ -29,6 +29,9 @@ public class QuizController {
                 .map(question -> createQuizResponse(question, questionDTO.getSelectedAnswers()));
     }
     private boolean isAnswerCorrect(Answer correctAnswer,Answer[] selectedAnswers){
+        if (selectedAnswers.length == 0) {
+            return false;
+        }
         for (Answer selectedAnswer : selectedAnswers) {
             if (correctAnswer.getId() != selectedAnswer.getId()) {
                 return false;
