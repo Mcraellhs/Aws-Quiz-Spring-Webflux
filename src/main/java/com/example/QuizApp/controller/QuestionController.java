@@ -28,8 +28,8 @@ public class QuestionController {
 
     @GetMapping("/all")
     public ResponseEntity<Flux<Question>> getAllQuestions(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "65") int size
-                                          ){
+                                                          @RequestParam(defaultValue = "65") int size
+    ) {
         Flux<Question> data = questionRepository.findAll(Sort.unsorted())
                 .skip(page * size)
                 .take(size);
@@ -39,17 +39,25 @@ public class QuestionController {
 
         return ResponseEntity.ok().headers(headers).body(data);
     }
+
     @GetMapping
-    public Flux<QuestionsToGetDTO> getQuestions(){
+    public Flux<QuestionsToGetDTO> getQuestions() {
         return questionRepository.findAll().map(QuestionMapper::toQuestionToGetDTO);
     }
 
     @PostMapping
-    public Mono<ResponseEntity<Question>> saveQuestion(@RequestBody QuestionForSaveDTO questionForSaveDTO){
+    public Mono<ResponseEntity<Question>> saveQuestion(@RequestBody QuestionForSaveDTO questionForSaveDTO) {
         Question newQuestion = QuestionMapper.dtoForSaveToQuestion(questionForSaveDTO);
-
-        return questionRepository.save(newQuestion).map(x-> new ResponseEntity<>(x, HttpStatus.CREATED))
+        return questionRepository.save(newQuestion).map(x -> new ResponseEntity<>(x, HttpStatus.CREATED))
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED));
     }
 
+    @PostMapping("/multi")
+    public
+    Flux<Question> saveMultipleQuestion(@RequestBody QuestionForSaveDTO[] questionForSaveDTO) {
+        Flux<Question> questionFlux = Flux.fromArray(questionForSaveDTO)
+                .map(QuestionMapper::dtoForSaveToQuestion);
+
+        return questionRepository.saveAll(questionFlux);
+    }
 }
