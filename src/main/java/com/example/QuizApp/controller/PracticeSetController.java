@@ -59,6 +59,12 @@ public class PracticeSetController {
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED));
     }
 
+    @DeleteMapping("/{practiceSetID}")
+    public Mono<ResponseEntity<String>> deletePracticeSet(@PathVariable String practiceSetID){
+
+        return practiceSetRepository.deleteById(practiceSetID).map(x->ResponseEntity.ok().body("Deleted"));
+    }
+
 
     private QuestionsToGetDTO[] combineTwoArraysIntoOne(QuestionsToGetDTO[] arr1,QuestionsToGetDTO[] arr2){
         QuestionsToGetDTO[] newQuestions= new QuestionsToGetDTO[arr1.length+arr2.length];

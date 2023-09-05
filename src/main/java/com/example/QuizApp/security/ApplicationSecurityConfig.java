@@ -48,6 +48,8 @@ public class ApplicationSecurityConfig {
                 .pathMatchers(HttpMethod.GET,"/api/practice-set/**").permitAll()
                 .pathMatchers(HttpMethod.POST,"/api/practice-set/**").hasRole(ADMIN.name())
                 .pathMatchers(HttpMethod.PUT,"/api/practice-set/**").hasRole(ADMIN.name())
+                .pathMatchers(HttpMethod.DELETE,"/api/practice-set/**").hasRole(ADMIN.name())
+
 
                 .pathMatchers(HttpMethod.GET,"/api/question/**").permitAll()
                 .pathMatchers(HttpMethod.POST,"/api/question/**").hasRole(ADMIN.name())
