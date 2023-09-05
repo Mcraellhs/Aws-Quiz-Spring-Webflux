@@ -19,8 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/question")
-@CrossOrigin("*")
+@RequestMapping("/api/question")
 public class QuestionController {
 
     @Autowired

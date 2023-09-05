@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/quiz")
+@RequestMapping("/api/quiz")
 @CrossOrigin("*")
 public class QuizController {
 
